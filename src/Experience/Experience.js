@@ -21,28 +21,28 @@ export default class Experience {
     // Global access
     window.experience = this;
     this.canvas = canvas;
-    this.debug = new Debug();
+    // this.debug = new Debug();
     this.sampleBoolean = true;
     this.sampleNumber = 5;
-    if (this.debug.active) {
-      this.debugFolder = this.debug.ui.addFolder("experience");
-      const debugObject = {
-        sampleBoolean: this.sampleBoolean,
-        sampleNumber: this.sampleNumber,
-      };
-      this.debugFolder.add(debugObject, "sampleBoolean").onChange((value) => {
-        this.sampleBoolean = value;
-        console.log(this.sampleBoolean);
-      });
-      this.debugFolder
-        .add(debugObject, "sampleNumber")
-        .min(0.5)
-        .max(15)
-        .onChange((value) => {
-          this.sampleNumber = value;
-          console.log(this.sampleNumber);
-        });
-    }
+    // if (this.debug.active) {
+    //   this.debugFolder = this.debug.ui.addFolder("experience");
+    //   const debugObject = {
+    //     sampleBoolean: this.sampleBoolean,
+    //     sampleNumber: this.sampleNumber,
+    //   };
+    //   this.debugFolder.add(debugObject, "sampleBoolean").onChange((value) => {
+    //     this.sampleBoolean = value;
+    //     console.log(this.sampleBoolean);
+    //   });
+    //   this.debugFolder
+    //     .add(debugObject, "sampleNumber")
+    //     .min(0.5)
+    //     .max(15)
+    //     .onChange((value) => {
+    //       this.sampleNumber = value;
+    //       console.log(this.sampleNumber);
+    //     });
+    // }
     this.sizes = new Sizes();
     this.time = new Time();
     this.lastUpdated = this.time.current;
