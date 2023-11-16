@@ -92,7 +92,7 @@ export default class World {
       // // DNA2.position.y += 7;
       // // DNA.position.z -= 8;
       // // DNA2.position.z -= 8;
-      this.scene.add(new THREE.AxesHelper());
+      // this.scene.add(new THREE.AxesHelper());
       // this.spectra = new Spectra()
       // this.sushi = new Sushi()
       this.butterfly = new Butterfly();
