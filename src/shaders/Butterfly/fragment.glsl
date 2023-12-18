@@ -15,7 +15,8 @@ void main() {
     // set the fragcolor to be the texture color
     vec4 texColor = texture2D(texture1, vUv);
     float o = texColor.r;
-    gl_FragColor = vec4(color, o);
+    if ( texColor.a < 0.5 ) discard;
+    gl_FragColor = vec4(texColor.rgb, texColor.a );
 
     // gl_FragColor = vec4(1.0);
 }

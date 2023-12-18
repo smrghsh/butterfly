@@ -33,6 +33,7 @@ export default class Butterfly {
       vertexShader: ButterflyVertexShader,
       fragmentShader: ButterflyFragmentShader,
       transparent: true,
+      // opacity: 0.5,
       side: THREE.DoubleSide,
       uniforms: {
         uTime: { value: 0.0 },
@@ -67,7 +68,7 @@ export default class Butterfly {
     //   butterfly.position.z = (Math.random() - 0.5) * 5;
     //   this.butterflies.add(butterfly);
     // }
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 100; i++) {
       let butterflyGeometry = this.geometry.clone(); // Clone geometry
       let displacement = new Float32Array(
         butterflyGeometry.attributes.position.count
@@ -101,7 +102,7 @@ export default class Butterfly {
     // });
     this.scene.add(this.butterflies);
 
-    this.scene.add(this.mesh);
+    // this.scene.add(this.mesh);
   }
   update() {
     this.material.uniforms.uTime.value = this.experience.time.elapsed * 0.0001;
