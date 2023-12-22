@@ -3,6 +3,7 @@ import Debug from "./Utils/Debug.js";
 import Sizes from "./Utils/Sizes.js";
 import Time from "./Utils/Time.js";
 import Resources from "./Utils/Resources.js";
+import Mouse from "./Utils/Mouse.js";
 import Camera from "./Camera.js";
 import Renderer from "./Renderer.js";
 import World from "./World/World.js";
@@ -51,6 +52,7 @@ export default class Experience {
     this.world = new World();
     this.camera = new Camera();
     this.renderer = new Renderer();
+    this.mouse = new Mouse();
 
     this.renderer.instance.xr.enabled = true;
     document.body.appendChild(VRButton.createButton(this.renderer.instance));
