@@ -30,6 +30,10 @@ export default class Butterfly {
     this.geometry = new THREE.PlaneGeometry(1, 1, 2, 1);
     this.geometry.rotateX(-Math.PI * 0.5);
 
+    this.handStill = false;
+    this.trust = 0.0;
+    this.exiting = false;
+
     this.material = new THREE.ShaderMaterial({
       vertexShader: SentientButterflyVertexShader,
       fragmentShader: ButterflyFragmentShader,
@@ -56,7 +60,7 @@ export default class Butterfly {
   update() {
     this.raycaster.setFromCamera(this.mouse, this.experience.camera.instance);
 
-    let landingTarget = this.raycaster.ray.at(1);
+    let landingTarget = this.raycaster.ray.at(4);
 
     this.butterflyDirection = new THREE.Vector3();
     this.butterflyDirection.subVectors(
@@ -82,9 +86,18 @@ export default class Butterfly {
     );
     this.material.uniforms.uTime.value = this.experience.time.elapsed;
 
-    this.mesh.position.set(landingTarget.x, landingTarget.y, landingTarget.z);
-    this.mesh.position.x -= this.butterflyDirection.x * 0.1;
-    this.mesh.position.y -= this.butterflyDirection.y * 0.1;
-    this.mesh.position.z -= this.butterflyDirection.z * 0.1;
+    // vector3 that is part way between the current position and landing Target
+    this.butterflyPosition = new THREE.Vector3();
+    this.butterflyPosition.subVectors(landingTarget, this.mesh.position);
+    // this.material.uniforms.stillness.value =
+    //   1.0 - this.butterflyPosition.length();
+
+    this.butterflyPosition.multiplyScalar(0.01);
+    this.mesh.position.add(this.butterflyPosition);
+
+    // this.mesh.position.set(landingTarget.x, landingTarget.y, landingTarget.z);
+    // this.mesh.position.x -= this.butterflyDirection.x * 0.1;
+    // this.mesh.position.y -= this.butterflyDirection.y * 0.1;
+    // this.mesh.position.z -= this.butterflyDirection.z * 0.1;
   }
 }
