@@ -1,6 +1,6 @@
 # [butterfly](https://smrghsh.github.io/butterfly/)
 
-<!-- ![butterflies floating around in 3D](./butterflies.gif) -->
+![butterflies floating around in 3D](./butterflies.gif)
 
 3D sketch with a ton of butterflies flying around!
 
