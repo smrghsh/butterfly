@@ -62,14 +62,14 @@ export default class Butterfly {
 
     let landingTarget = this.raycaster.ray.at(4);
 
+    // make the butterfly face the right direction
+    // (target - position) X up, normalized
     this.butterflyDirection = new THREE.Vector3();
     this.butterflyDirection.subVectors(
       landingTarget,
       this.experience.camera.instance.position
     );
-
     this.butterflyDirection.normalize();
-    //cross butterflyDirection with camera.up
     this.butterflyDirection.crossVectors(
       this.butterflyDirection,
       this.experience.camera.instance.up
@@ -84,20 +84,13 @@ export default class Butterfly {
       landingTarget.y + this.butterflyDirection.y,
       landingTarget.z + this.butterflyDirection.z
     );
-    this.material.uniforms.uTime.value = this.experience.time.elapsed;
+    this.material.uniforms.uTime.value =
+      this.experience.clock.getElapsedTime() * 0.2;
 
     // vector3 that is part way between the current position and landing Target
     this.butterflyPosition = new THREE.Vector3();
     this.butterflyPosition.subVectors(landingTarget, this.mesh.position);
-    // this.material.uniforms.stillness.value =
-    //   1.0 - this.butterflyPosition.length();
-
     this.butterflyPosition.multiplyScalar(0.01);
     this.mesh.position.add(this.butterflyPosition);
-
-    // this.mesh.position.set(landingTarget.x, landingTarget.y, landingTarget.z);
-    // this.mesh.position.x -= this.butterflyDirection.x * 0.1;
-    // this.mesh.position.y -= this.butterflyDirection.y * 0.1;
-    // this.mesh.position.z -= this.butterflyDirection.z * 0.1;
   }
 }

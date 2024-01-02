@@ -69,17 +69,11 @@ export default class Butterflies {
       butterfly.position.z = (Math.random() - 0.5) * 5;
       this.butterflies.add(butterfly);
     }
-
-    // this.material = new THREE.MeshBasicMaterial({
-    //   color: 0xff0000,
-    //   wireframe: true,
-    // });
     this.scene.add(this.butterflies);
-
-    // this.scene.add(this.mesh);
   }
   update() {
-    this.material.uniforms.uTime.value = this.experience.time.elapsed * 0.0001;
+    this.material.uniforms.uTime.value =
+      this.experience.clock.getElapsedTime() * 0.2;
     // iterate through every butterfly with a forEach loop, increment the position vector of the butterfly by 0.01 in the orientation direciton
     this.butterflies.children.forEach((butterfly) => {
       // get the vector of the butterflies orientation

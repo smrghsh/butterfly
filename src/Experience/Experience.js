@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import Debug from "./Utils/Debug.js";
 import Sizes from "./Utils/Sizes.js";
-import Time from "./Utils/Time.js";
 import Resources from "./Utils/Resources.js";
 import Mouse from "./Utils/Mouse.js";
 import Camera from "./Camera.js";
@@ -45,14 +44,18 @@ export default class Experience {
     //     });
     // }
     this.sizes = new Sizes();
-    this.time = new Time();
-    this.lastUpdated = this.time.current;
     this.scene = new THREE.Scene();
     this.resources = new Resources(sources);
     this.world = new World();
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.mouse = new Mouse();
+
+    /**
+     * Clock
+     */
+    this.clock = new THREE.Clock();
+    this.clock.start();
 
     this.renderer.instance.xr.enabled = true;
     document.body.appendChild(VRButton.createButton(this.renderer.instance));
@@ -92,32 +95,10 @@ export default class Experience {
   }
   update() {
     this.camera.update();
-    // this.renderer.update()
     this.world.update();
-    // this.world.circles.undulate(this.time.elapsed)
-    // this.world.hypercube.wub(this.time.elapsed)
-    //https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_cubes.html
 
     //change this to be controller if controller is active
     this.raycaster.setFromCamera(this.mouse, this.camera.instance);
-    // console.log(this.mouse)
-    // TODO, make raycaster its own class
-    // const intersects = this.raycaster.intersectObjects( this.scene.children, false );
-    // if ( intersects.length > 0 ) {
-    //     if ( this.INTERSECTED != intersects[ 0 ].object ) {
-    //         if ( this.INTERSECTED ) this.INTERSECTED.material.color.setHex( this.INTERSECTED.currentHex );
-    //         this.INTERSECTED = intersects[ 0 ].object;
-    //         this.INTERSECTED.currentHex = this.INTERSECTED.material.color.getHex();
-    //         this.INTERSECTED.material.color.setHex( 0xff0000 );
-
-    //     }
-    // } else {
-
-    //     if ( this.INTERSECTED ) this.INTERSECTED.material.color.setHex( this.INTERSECTED.currentHex );
-
-    //     this.INTERSECTED = null;
-
-    // }
   }
   destroy() {
     this.sizes.off("resize");
