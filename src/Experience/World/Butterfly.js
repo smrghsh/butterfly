@@ -53,8 +53,8 @@ export default class Butterfly {
     this.mesh.position.y += 0.001;
     this.mesh.scale.set(0.1, 0.1, 0.1);
 
-    this.axesHelper = new THREE.AxesHelper(5);
-    this.scene.add(this.axesHelper);
+    // this.axesHelper = new THREE.AxesHelper(5);
+    // this.scene.add(this.axesHelper);
     this.scene.add(this.mesh);
   }
   update() {
