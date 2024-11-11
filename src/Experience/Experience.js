@@ -58,7 +58,12 @@ export default class Experience {
     this.clock.start();
 
     this.renderer.instance.xr.enabled = true;
-    document.body.appendChild(VRButton.createButton(this.renderer.instance));
+    const sessionInit = {
+      requiredFeatures: ["hand-tracking"],
+    };
+    document.body.appendChild(
+      VRButton.createButton(this.renderer.instance, sessionInit)
+    );
     this.renderer.instance.setAnimationLoop(() => {
       // tick();
       this.world.update();
@@ -70,6 +75,7 @@ export default class Experience {
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     this.INTERSECTED = null;
+
     window.addEventListener("mousemove", (event) => {
       this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
       this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
@@ -84,9 +90,9 @@ export default class Experience {
       this.camera.resize();
       this.renderer.resize();
     });
-    this.time.on("tick", () => {
-      this.update();
-    });
+    // this.time.on("tick", () => {
+    //   this.update();
+    // });
   }
 
   resize() {
