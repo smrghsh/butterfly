@@ -36,11 +36,57 @@ export default class Controllers {
     this.hand2 = this.renderer.instance.xr.getHand(1);
     this.hand2.add(this.handModelFactory.createHandModel(this.hand2, "mesh"));
     this.scene.add(this.hand2);
+
+    this.debugBoxR = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    );
+    this.debugBoxR.visible = false;
+    this.scene.add(this.debugBoxR);
+
+    this.still = false;
+    this.stillStartTime = 0;
+    this.stillDuration = 0;
+
+    this.previouslandingTarget = new THREE.Vector3();
   }
+  update() {
+    if (this.hand2.joints.hasOwnProperty("index-finger-phalanx-proximal")) {
+      const joint = this.hand2?.joints["index-finger-phalanx-proximal"];
+      if (joint) {
+        const landingTarget = joint.position
+          .clone()
+          .add(new THREE.Vector3(0, joint.jointRadius, 0));
+        // if distance between previous and current landing target is less than 0.01
 
-  setInstance() {}
+        if (this.previouslandingTarget.distanceTo(landingTarget) < 0.01) {
+          if (!this.still) {
+            this.still = true;
+            this.stillStartTime = this.experience.clock.getElapsedTime();
+            this.stillDuration = 0;
+          } else {
+            this.stillDuration =
+              this.experience.clock.getElapsedTime() - this.stillStartTime;
+          }
+        } else {
+          this.still = false;
+          this.stillStartTime = 0;
+          this.stillDuration = 0;
+        }
 
-  resize() {}
+        this.debugBoxR.position.copy(landingTarget); //addition to get to the surface of the hand
+        this.debugBoxR.quaternion.copy(joint.quaternion);
+        this.debugBoxR.scale.set(
+          joint.jointRadius,
+          joint.jointRadius,
+          joint.jointRadius
+        );
+        this.debugBoxR.visible = true;
 
-  update() {}
+        this.previouslandingTarget.copy(landingTarget);
+      } else {
+        this.debugBoxR.visible = false;
+      }
+    }
+  }
 }

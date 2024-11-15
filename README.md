@@ -7,5 +7,3 @@
 # how it works
 
 The sprite and the wing flapping technique originate from [this youtube video](https://www.youtube.com/watch?v=-4hlSoiR9sc&ab_channel=Miziziziz) by [Miziziziz](https://github.com/Miziziziz)
-
-<!-- The source image for the butterfly came from here: -->

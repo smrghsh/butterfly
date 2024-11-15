@@ -59,7 +59,7 @@ export default class Experience {
 
     this.renderer.instance.xr.enabled = true;
     const sessionInit = {
-      requiredFeatures: ["hand-tracking"],
+      requiredFeatures: ["hand-tracking"], //necessary to get the hands going
     };
     document.body.appendChild(
       VRButton.createButton(this.renderer.instance, sessionInit)
@@ -67,6 +67,7 @@ export default class Experience {
     this.renderer.instance.setAnimationLoop(() => {
       // tick();
       this.world.update();
+      this.controllers?.update();
       this.renderer.instance.render(this.scene, this.camera.instance);
     });
 

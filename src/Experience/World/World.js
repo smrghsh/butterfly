@@ -3,7 +3,7 @@ import Experience from "../Experience.js";
 import Environment from "./Environment.js";
 import Floor from "./Floor.js";
 import Stars from "./Stars.js";
-// import Butterfly from "./Butterfly.js";
+import Butterfly from "./Butterfly.js";
 import Butterflies from "./Butterflies.js";
 
 export default class World {
@@ -21,7 +21,7 @@ export default class World {
       console.log("resources ready");
       this.stars = new Stars();
       this.butterflies = new Butterflies();
-      // this.butterfly = new Butterfly();
+      this.butterfly = new Butterfly();
 
       this.environment = new Environment();
       this.ready = true;
@@ -30,7 +30,7 @@ export default class World {
   update() {
     if (this.ready) {
       this.butterflies.update();
-      // this.butterfly.update();
+      this.butterfly.update();
     }
   }
 }
