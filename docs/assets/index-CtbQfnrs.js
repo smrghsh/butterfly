@@ -27062,8 +27062,6 @@ class Environment {
     this.sunLight.position.set(3.5, 2, 10.25);
     this.scene.add(this.sunLight);
   }
-  setEnvironmentMap() {
-  }
 }
 var vertex_default$1 = "varying vec3 vPosition;\n\nvoid main() {\n    \n    vec4 modelPosition = modelMatrix * vec4(position, 1.0);\n    vec4 viewPosition = viewMatrix * modelPosition;\n    vec4 projectedPosition = projectionMatrix * viewPosition;\n    gl_Position = projectedPosition;\n    vPosition = position;\n}";
 var fragment_default$1 = "varying vec3 vPosition;\n\nvoid main() {\n    vec3 color = vec3(1.0);\n    \n    float thickness = 0.01;\n    float opacity = smoothstep(1.0-thickness ,1.0,(vPosition.x - thickness/2.0) - floor(vPosition.x-thickness/2.0));\n    opacity += smoothstep(1.0-thickness ,1.0,(vPosition.y - thickness/2.0) - floor(vPosition.y-thickness/2.0));opacity = opacity/2.0;\n    opacity = step(0.01,opacity);\n    opacity = opacity/4.0;\n    gl_FragColor = vec4(color,opacity);\n}";
@@ -28225,4 +28223,4 @@ class Experience {
   }
 }
 new Experience(document.querySelector("canvas.webgl"));
-//# sourceMappingURL=index-DXhWTbvM.js.map
+//# sourceMappingURL=index-CtbQfnrs.js.map

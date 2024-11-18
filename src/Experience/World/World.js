@@ -2,7 +2,6 @@ import * as THREE from "three";
 import Experience from "../Experience.js";
 import Environment from "./Environment.js";
 import Floor from "./Floor.js";
-import Stars from "./Stars.js";
 import Butterfly from "./Butterfly.js";
 import Butterflies from "./Butterflies.js";
 
@@ -18,7 +17,6 @@ export default class World {
     this.resources.on("ready", () => {
       // Setup
       console.log("resources ready");
-      // this.stars = new Stars();
       this.floor = new Floor();
 
       this.butterflies = new Butterflies();

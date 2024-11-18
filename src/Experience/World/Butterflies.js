@@ -115,8 +115,6 @@ export default class Butterflies {
       if (butterfly.position.z < -1 * this.boundary) {
         butterfly.position.z = this.boundary;
       }
-      //   if (butterfly.position.x > 10) {
-      //   butterfly.position.x += 0.01;
     });
   }
 }

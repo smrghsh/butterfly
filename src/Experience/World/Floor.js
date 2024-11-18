@@ -30,7 +30,6 @@ export default class Floor {
     this.forestFloor = this.resources.items.forestFloor.scene;
     this.forestFloor.scale.set(0.8, 0.8, 0.8);
     this.forestFloor.rotation.y = Math.PI;
-    // this.forestFloor.position.y = -1.5;
     this.scene.add(this.forestFloor);
   }
 }
