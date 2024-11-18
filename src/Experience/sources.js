@@ -9,4 +9,9 @@ export default [
     type: "texture",
     path: "textures/5.png",
   },
+  {
+    name: "forestFloor",
+    type: "glbModel",
+    path: "forestbase.glb",
+  },
 ];

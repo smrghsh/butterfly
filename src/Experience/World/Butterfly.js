@@ -3,11 +3,11 @@ import Experience from "../Experience.js";
 import SentientButterflyVertexShader from "../../shaders/Butterfly/sentientVertex.glsl";
 import ButterflyFragmentShader from "../../shaders/Butterfly/fragment.glsl";
 
-import Mouse from "../Utils/Mouse.js";
 export default class Butterfly {
   constructor() {
     this.experience = new Experience();
     this.scene = this.experience.scene;
+    this.mouse = this.experience.mouse;
     //resources
     this.resources = this.experience.resources;
     this.mouse = this.experience.mouse;
@@ -34,9 +34,16 @@ export default class Butterfly {
     this.mesh.position.y += 0.001;
     this.mesh.scale.set(0.1, 0.1, 0.1);
 
-    // this.axesHelper = new THREE.AxesHelper(5);
-    // this.scene.add(this.axesHelper);
     this.scene.add(this.mesh);
+    console.log(this.mouse);
+    this.mouse.emitter.on("still", () => {
+      this.mesh.visible = true;
+      this.mesh.position.set(this.mouse.x, 1, this.mouse.y);
+    });
+
+    this.mouse.emitter.on("moved", () => {
+      this.mesh.visible = false;
+    });
   }
   update() {
     this.raycaster.setFromCamera(this.mouse, this.experience.camera.instance);
@@ -53,6 +60,7 @@ export default class Butterfly {
     } else {
       this.raycaster.ray.at(4, landingTarget);
     }
+
     this.butterflyDirection = new THREE.Vector3();
     this.butterflyDirection.subVectors(
       landingTarget,

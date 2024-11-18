@@ -45,6 +45,7 @@ export default class Controllers {
     this.scene.add(this.debugBoxR);
 
     this.still = false;
+    this.emitter = this.experience.emitter;
     this.stillStartTime = 0;
     this.stillDuration = 0;
 
@@ -57,23 +58,20 @@ export default class Controllers {
         const landingTarget = joint.position
           .clone()
           .add(new THREE.Vector3(0, joint.jointRadius, 0));
-        // if distance between previous and current landing target is less than 0.01
 
         if (this.previouslandingTarget.distanceTo(landingTarget) < 0.01) {
           if (!this.still) {
-            this.still = true;
-            this.stillStartTime = this.experience.clock.getElapsedTime();
-            this.stillDuration = 0;
-          } else {
-            this.stillDuration =
-              this.experience.clock.getElapsedTime() - this.stillStartTime;
+            this.still = true; // Set stillness state
+            this.emitter.trigger("still"); // Emit only once
+            this.debugBoxR.material.color.set(0x00ff00);
           }
         } else {
-          this.still = false;
-          this.stillStartTime = 0;
-          this.stillDuration = 0;
+          if (this.still) {
+            this.emitter.trigger("moved"); // Emit moved event
+            this.debugBoxR.material.color.set(0xff0000);
+          }
+          this.still = false; // Reset stillness state
         }
-
         this.debugBoxR.position.copy(landingTarget); //addition to get to the surface of the hand
         this.debugBoxR.quaternion.copy(joint.quaternion);
         this.debugBoxR.scale.set(

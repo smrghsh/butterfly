@@ -12,14 +12,15 @@ export default class World {
     this.sizes = this.experience.sizes;
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
-    this.floor = new Floor();
 
     // Wait for resources
     this.ready = false;
     this.resources.on("ready", () => {
       // Setup
       console.log("resources ready");
-      this.stars = new Stars();
+      // this.stars = new Stars();
+      this.floor = new Floor();
+
       this.butterflies = new Butterflies();
       this.butterfly = new Butterfly();
 
