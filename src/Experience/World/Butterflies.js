@@ -20,6 +20,9 @@ export default class Butterflies {
     this.scene = this.experience.scene;
     //resources
     this.resources = this.experience.resources;
+
+    // butterfly boundaries
+    this.boundary = 3;
     //get butterfly texture
     this.butterflyTexture = this.resources.items.butterflyTexture;
 
@@ -94,23 +97,23 @@ export default class Butterflies {
         )
       );
       // reset the position if the butterfly is too far away
-      if (butterfly.position.x > 2.5) {
-        butterfly.position.x = -2.5;
+      if (butterfly.position.x > this.boundary) {
+        butterfly.position.x = -1 * this.boundary;
       }
-      if (butterfly.position.x < -2.5) {
-        butterfly.position.x = 2.5;
+      if (butterfly.position.x < -1 * this.boundary) {
+        butterfly.position.x = this.boundary;
       }
-      if (butterfly.position.y > 2.5) {
-        butterfly.position.y = -2.5;
+      if (butterfly.position.y > this.boundary) {
+        butterfly.position.y = -1 * this.boundary;
       }
-      if (butterfly.position.y < -2.5) {
-        butterfly.position.y = 2.5;
+      if (butterfly.position.y < -1 * this.boundary) {
+        butterfly.position.y = this.boundary;
       }
-      if (butterfly.position.z > 2.5) {
-        butterfly.position.z = -2.5;
+      if (butterfly.position.z > this.boundary) {
+        butterfly.position.z = -1 * this.boundary;
       }
-      if (butterfly.position.z < -2.5) {
-        butterfly.position.z = 2.5;
+      if (butterfly.position.z < -1 * this.boundary) {
+        butterfly.position.z = this.boundary;
       }
       //   if (butterfly.position.x > 10) {
       //   butterfly.position.x += 0.01;
