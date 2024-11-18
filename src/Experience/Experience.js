@@ -9,7 +9,7 @@ import World from "./World/World.js";
 import sources from "./sources.js";
 import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
 import Controllers from "./Controllers.js";
-
+import EventEmitter from "./Utils/EventEmitter.js";
 let instance = null;
 
 export default class Experience {
@@ -21,6 +21,7 @@ export default class Experience {
     // Global access
     window.experience = this;
     this.canvas = canvas;
+    this.emitter = new EventEmitter();
     // this.debug = new Debug();
     this.sampleBoolean = true;
     this.sampleNumber = 5;
@@ -59,7 +60,7 @@ export default class Experience {
 
     this.renderer.instance.xr.enabled = true;
     const sessionInit = {
-      requiredFeatures: ["hand-tracking"],
+      requiredFeatures: ["hand-tracking"], //necessary to get the hands going
     };
     document.body.appendChild(
       VRButton.createButton(this.renderer.instance, sessionInit)
@@ -67,24 +68,24 @@ export default class Experience {
     this.renderer.instance.setAnimationLoop(() => {
       // tick();
       this.world.update();
+      this.controllers?.update();
       this.renderer.instance.render(this.scene, this.camera.instance);
     });
 
     this.controllers = new Controllers();
 
     this.raycaster = new THREE.Raycaster();
-    this.mouse = new THREE.Vector2();
     this.INTERSECTED = null;
 
-    window.addEventListener("mousemove", (event) => {
-      this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
-      this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
-    });
-    window.addEventListener("click", () => {
-      if (this.INTERSECTED) {
-        // do something here if there is something in this.INTERSECTED
-      }
-    });
+    // window.addEventListener("mousemove", (event) => {
+    //   this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
+    //   this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
+    // });
+    // window.addEventListener("click", () => {
+    //   if (this.INTERSECTED) {
+    //     // do something here if there is something in this.INTERSECTED
+    //   }
+    // });
     this.sizes.on("resize", () => {
       this.resize();
       this.camera.resize();

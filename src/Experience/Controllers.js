@@ -36,11 +36,55 @@ export default class Controllers {
     this.hand2 = this.renderer.instance.xr.getHand(1);
     this.hand2.add(this.handModelFactory.createHandModel(this.hand2, "mesh"));
     this.scene.add(this.hand2);
+
+    this.debugBoxR = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    );
+    this.debugBoxR.visible = false;
+    this.scene.add(this.debugBoxR);
+
+    this.still = false;
+    this.emitter = this.experience.emitter;
+    this.stillStartTime = 0;
+    this.stillDuration = 0;
+
+    this.previouslandingTarget = new THREE.Vector3();
   }
+  update() {
+    if (this.hand2.joints.hasOwnProperty("index-finger-phalanx-proximal")) {
+      const joint = this.hand2?.joints["index-finger-phalanx-proximal"];
+      if (joint) {
+        const landingTarget = joint.position
+          .clone()
+          .add(new THREE.Vector3(0, joint.jointRadius, 0));
 
-  setInstance() {}
+        if (this.previouslandingTarget.distanceTo(landingTarget) < 0.01) {
+          if (!this.still) {
+            this.still = true; // Set stillness state
+            this.emitter.trigger("still"); // Emit only once
+            this.debugBoxR.material.color.set(0x00ff00);
+          }
+        } else {
+          if (this.still) {
+            this.emitter.trigger("moved"); // Emit moved event
+            this.debugBoxR.material.color.set(0xff0000);
+          }
+          this.still = false; // Reset stillness state
+        }
+        this.debugBoxR.position.copy(landingTarget); //addition to get to the surface of the hand
+        this.debugBoxR.quaternion.copy(joint.quaternion);
+        this.debugBoxR.scale.set(
+          joint.jointRadius,
+          joint.jointRadius,
+          joint.jointRadius
+        );
+        this.debugBoxR.visible = true;
 
-  resize() {}
-
-  update() {}
+        this.previouslandingTarget.copy(landingTarget);
+      } else {
+        this.debugBoxR.visible = false;
+      }
+    }
+  }
 }
