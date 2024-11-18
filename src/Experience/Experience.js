@@ -55,23 +55,11 @@ export default class Experience {
     this.raycaster = new THREE.Raycaster();
     this.INTERSECTED = null;
 
-    // window.addEventListener("mousemove", (event) => {
-    //   this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
-    //   this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
-    // });
-    // window.addEventListener("click", () => {
-    //   if (this.INTERSECTED) {
-    //     // do something here if there is something in this.INTERSECTED
-    //   }
-    // });
     this.sizes.on("resize", () => {
       this.resize();
       this.camera.resize();
       this.renderer.resize();
     });
-    // this.time.on("tick", () => {
-    //   this.update();
-    // });
   }
 
   resize() {
