@@ -15,6 +15,7 @@ export default class Butterfly {
     //get butterfly texture
     this.butterflyTexture = this.resources.items.butterflyTexture;
 
+    this.skittish = true;
     this.geometry = new THREE.PlaneGeometry(1, 1, 2, 1);
     this.geometry.rotateX(-Math.PI * 0.5);
 
@@ -38,18 +39,43 @@ export default class Butterfly {
     console.log(this.mouse);
     this.mouse.emitter.on("still", () => {
       this.mesh.visible = true;
-      this.mesh.position.set(this.mouse.x, 1, this.mouse.y);
+      this.skittish = false;
+      // if xr active, set the position to one foot above the this.experience.controllers.previouslandingTarget.clone();
+      // otherwise, set the position to one foot above the mouse position
+      if (
+        this.experience.renderer.instance.xr.isPresenting &&
+        this.experience.controllers.hand2.joints.hasOwnProperty(
+          "index-finger-phalanx-proximal"
+        )
+      ) {
+        this.mesh.position.set(
+          this.experience.controllers.previouslandingTarget.x + 0.5,
+          this.experience.controllers.previouslandingTarget.y + 0.5,
+          this.experience.controllers.previouslandingTarget.z + 0.2
+        );
+      } else {
+        const departure = new THREE.Vector3();
+        this.raycaster.ray.at(4, departure);
+        departure.y += 0.5;
+        departure.x += 0.5;
+        this.mesh.position.set(departure.x, departure.y, departure.z);
+      }
+      // this.mesh.position.set(this.mouse.x, 1, this.mouse.y + 1);
     });
 
     this.mouse.emitter.on("moved", () => {
       this.mesh.visible = false;
+      this.skittish = true;
     });
   }
   update() {
+    //
     this.raycaster.setFromCamera(this.mouse, this.experience.camera.instance);
 
     let landingTarget = new THREE.Vector3();
-    this.raycaster.ray.at(4, landingTarget);
+    if (this.skittish) {
+      return;
+    }
     if (
       this.experience.renderer.instance.xr.isPresenting &&
       this.experience.controllers.hand2.joints.hasOwnProperty(
