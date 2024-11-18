@@ -28,12 +28,12 @@ export default class Butterfly {
       uniforms: {
         uTime: { value: 0.0 },
         texture1: { value: this.butterflyTexture },
-        stillness: { value: 0.1 },
+        stillness: { value: 1.0 },
       },
     });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.position.y += 0.001;
-    this.mesh.scale.set(0.1, 0.1, 0.1);
+    this.mesh.scale.set(0.085, 0.085, 0.085);
 
     this.scene.add(this.mesh);
     console.log(this.mouse);
@@ -114,5 +114,20 @@ export default class Butterfly {
     this.butterflyPosition.subVectors(landingTarget, this.mesh.position);
     this.butterflyPosition.multiplyScalar(0.01);
     this.mesh.position.add(this.butterflyPosition);
+
+    //proportionally set this.material.uniforms.stillness.value to 0.0 if within 0.01 of landing target, and 1.0 if it is one unit away, it should be a linear transition
+
+    // Adjust stillness based on distance to landing target
+    const distance = this.mesh.position.distanceTo(landingTarget);
+
+    if (distance >= 1.0) {
+      this.material.uniforms.stillness.value = 0.0;
+    } else if (distance <= 0.01) {
+      this.material.uniforms.stillness.value = 1.0;
+    } else {
+      // Linearly interpolate between 0.0 and 1.0
+      const t = (distance - 0.01) / (1.0 - 0.01); // Normalize to range 0.0 to 1.0
+      this.material.uniforms.stillness.value = 1.0 - t; // Invert to make closer = stiller
+    }
   }
 }

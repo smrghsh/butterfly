@@ -74,6 +74,7 @@ export default class Experience {
     this.raycaster.setFromCamera(this.mouse, this.camera.instance);
   }
   destroy() {
+    // TBH I've never used this
     this.sizes.off("resize");
     this.time.off("tick");
 

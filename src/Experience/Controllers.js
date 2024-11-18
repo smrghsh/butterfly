@@ -42,7 +42,7 @@ export default class Controllers {
       new THREE.MeshBasicMaterial({ color: 0xff0000 })
     );
     this.debugBoxR.visible = false;
-    this.scene.add(this.debugBoxR);
+    // this.scene.add(this.debugBoxR);
 
     this.still = false;
     this.emitter = this.experience.emitter;
