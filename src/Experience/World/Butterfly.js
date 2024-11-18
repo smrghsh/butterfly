@@ -60,7 +60,6 @@ export default class Butterfly {
         departure.x += 0.5;
         this.mesh.position.set(departure.x, departure.y, departure.z);
       }
-      // this.mesh.position.set(this.mouse.x, 1, this.mouse.y + 1);
     });
 
     this.mouse.emitter.on("moved", () => {
