@@ -8,14 +8,15 @@ export default class Locomotion {
     this.speedScalar = speedScalar;
     this.lastTimeTeleported = Date.now();
     this.teleportDelay = 2000;
-    this.floors = [0, -5];
     // add horizontal planes of different colors to this.experience.scene at -4, -8, and -12
   }
 
   update() {
     const controller = this.experience.controller.pointerController;
+    // TODO: remove
     const padControls = controller.padControls;
 
+    // TODO: this needs to be updated to use the hand
     if (padControls.primarySqueeze.pressDown && !this.isSqueezing) {
       // Start locomotion by setting the anchor point
       this.anchorPoint = controller.position.clone();
@@ -24,6 +25,8 @@ export default class Locomotion {
 
     if (this.isSqueezing) {
       // Calculate the movement vector
+
+      // TODO: this needs to be updated to use the hand
       const currentPosition = controller.position.clone();
       const movementVector = currentPosition.sub(this.anchorPoint);
       // multiply movement vector by speed scalar
@@ -31,52 +34,16 @@ export default class Locomotion {
       // Apply movement to the user's group in the experience scene
       this.experience.cameraGroup.position.sub(movementVector);
 
+      // TODO: update to use hand
       // Update the anchor point to the new controller position
       this.anchorPoint = controller.position.clone();
     }
 
+    // TODO: update to use the hand
     if (padControls.primarySqueeze.pressUp && this.isSqueezing) {
       // End locomotion
       this.isSqueezing = false;
       this.anchorPoint = null;
-    }
-    if (padControls.buttons.bottom.pressDown) {
-      if (Date.now() > this.lastTimeTeleported + this.teleportDelay) {
-        console.log("teleport");
-
-        // Determine the current floor based on the camera's y position
-        const currentY = this.experience.cameraGroup.position.y;
-        let currentFloorIndex = this.floors.findIndex(
-          (floorY) => floorY === currentY
-        );
-
-        // If the current floor is not found (for example, if the position is slightly off)
-        if (currentFloorIndex === -1) {
-          // Find the closest floor (can improve this to handle small offsets)
-          currentFloorIndex = this.floors.reduce((closestIndex, floorY, i) => {
-            return Math.abs(currentY - floorY) <
-              Math.abs(currentY - this.floors[closestIndex])
-              ? i
-              : closestIndex;
-          }, 0);
-        }
-
-        // Calculate the next floor index
-        let nextFloorIndex = (currentFloorIndex + 1) % this.floors.length;
-
-        // Set the camera's position to the next floor
-        this.experience.cameraGroup.position.set(
-          0,
-          this.floors[nextFloorIndex],
-          0
-        );
-
-        // Update the last teleport time
-        this.lastTimeTeleported = Date.now();
-      } else {
-        console.log("already teleported");
-        return;
-      }
     }
   }
 }
