@@ -26,6 +26,8 @@ export default class Experience {
     this.scene = new THREE.Scene();
     this.resources = new Resources(sources);
     this.world = new World();
+    this.cameraGroup = new THREE.Group();
+    this.scene.add(this.cameraGroup);
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.mouse = new Mouse();
@@ -38,7 +40,7 @@ export default class Experience {
 
     this.renderer.instance.xr.enabled = true;
     const sessionInit = {
-      requiredFeatures: ["hand-tracking"], //necessary to get the hands going
+      optionalFeatures: ["hand-tracking"], //necessary to get the hands going
     };
     document.body.appendChild(
       VRButton.createButton(this.renderer.instance, sessionInit)

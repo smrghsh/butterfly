@@ -26985,7 +26985,7 @@ class Camera2 {
   constructor() {
     this.experience = new Experience();
     this.sizes = this.experience.sizes;
-    this.scene = this.experience.scene;
+    this.cameraGroup = this.experience.cameraGroup;
     this.canvas = this.experience.canvas;
     this.setInstance();
     this.setOrbitControls();
@@ -26998,7 +26998,7 @@ class Camera2 {
       100
     );
     this.lookAt = new Vector3(0, 1, 0);
-    this.scene.add(this.instance);
+    this.cameraGroup.add(this.instance);
   }
   setOrbitControls() {
     this.controls = new OrbitControls(this.instance, this.canvas);
@@ -27050,7 +27050,7 @@ class Environment {
     this.scene.fog = new Fog("#ffffff", 1, 15);
   }
   setAmbientLight() {
-    this.ambientLight = new AmbientLight("#feff7f", 3);
+    this.ambientLight = new AmbientLight("#ffffff", 3);
     this.scene.add(this.ambientLight);
   }
   setSunLight() {
@@ -27091,7 +27091,7 @@ class Floor {
     this.scene.add(this.forestFloor);
   }
 }
-var sentientVertex_default = "#define PI     3.14159265\n#define TWO_PI 6.28318530\n\nuniform float uTime;\nvarying vec3 vP;\nvarying vec2 vUv;\nattribute float displacement;\nuniform float stillness;\nvarying float d;\nfloat rand(vec2 co){\n	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\n}\n\nvoid main() {         \n    vUv = uv;   \n    d = displacement;                                                                                                                                                                              \n    vec3 p = vec3(position);\n    \n    \n    \n    \n    float stillFlutter = 1.3 * abs(p.x) * (1.4/1.0 + stillness) + abs(p.x)* 0.15 * sin(uTime/(1.0 + stillness*1000.0));\n    \n    \n    p.y = stillFlutter;\n    \n     vec4 modelPosition = modelMatrix * vec4(p, 1.0);\n    \n    vec4 viewPosition = viewMatrix * modelPosition;\n    vec4 projectedPosition = projectionMatrix * viewPosition;\n    vP = position;\n    gl_Position = projectedPosition;\n}";
+var sentientVertex_default = "#define PI     3.14159265\n#define TWO_PI 6.28318530\n\nuniform float uTime;\nvarying vec3 vP;\nvarying vec2 vUv;\nattribute float displacement;\nuniform float stillness;\nvarying float d;\nfloat rand(vec2 co){\n	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\n}\n\nvoid main() {         \n    vUv = uv;   \n    d = displacement;                                                                                                                                                                              \n    vec3 p = vec3(position);\n    \n    \n    \n    float flutterPosition = p.y;\n    flutterPosition += 1.4 * abs(p.x) * sin((uTime)*100.*(1.0 + 0.5*rand(vec2(d,0.))) - displacement);\n    \n    \n    p.y = mix(flutterPosition,1.4*abs(p.x),stillness);\n    \n    \n     vec4 modelPosition = modelMatrix * vec4(p, 1.0);\n    \n    vec4 viewPosition = viewMatrix * modelPosition;\n    vec4 projectedPosition = projectionMatrix * viewPosition;\n    vP = position;\n    gl_Position = projectedPosition;\n}";
 var fragment_default = "varying vec3 vP;\nvarying vec2 vUv;\nuniform sampler2D texture1;\nuniform float uTime;\nvarying float d;\nvec3 pal( float t, vec3 a, vec3 b, vec3 c, vec3 d )\n{\n    return a + b*cos( 6.28318*(c*t+d) );\n}\n\nvoid main() {\n    vec3 color = pal(d *0.001,vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.33,0.67));\n    \n    \n    \n    vec4 texColor = texture2D(texture1, vUv);\n    float o = texColor.r;\n    if ( texColor.a < 0.5 ) discard;\n    gl_FragColor = vec4(texColor.rgb, texColor.a );\n\n    \n}";
 class Butterfly {
   constructor() {
@@ -27114,12 +27114,12 @@ class Butterfly {
       uniforms: {
         uTime: { value: 0 },
         texture1: { value: this.butterflyTexture },
-        stillness: { value: 0.1 }
+        stillness: { value: 1 }
       }
     });
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.position.y += 1e-3;
-    this.mesh.scale.set(0.1, 0.1, 0.1);
+    this.mesh.scale.set(0.085, 0.085, 0.085);
     this.scene.add(this.mesh);
     console.log(this.mouse);
     this.mouse.emitter.on("still", () => {
@@ -27182,6 +27182,15 @@ class Butterfly {
     this.butterflyPosition.subVectors(landingTarget, this.mesh.position);
     this.butterflyPosition.multiplyScalar(0.01);
     this.mesh.position.add(this.butterflyPosition);
+    const distance = this.mesh.position.distanceTo(landingTarget);
+    if (distance >= 1) {
+      this.material.uniforms.stillness.value = 0;
+    } else if (distance <= 0.01) {
+      this.material.uniforms.stillness.value = 1;
+    } else {
+      const t = (distance - 0.01) / (1 - 0.01);
+      this.material.uniforms.stillness.value = 1 - t;
+    }
   }
 }
 var vertex_default = "#define PI     3.14159265\n#define TWO_PI 6.28318530\n\nuniform float uTime;\nvarying vec3 vP;\nvarying vec2 vUv;\nattribute float displacement;\nvarying float d;\n\nfloat rand(vec2 co){\n	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\n}\n\nvoid main() {         \n    vUv = uv;   \n    d = displacement;                                                                                                                                                                              \n    vec3 p = vec3(position);\n    \n    \n    \n    p.z += 1.4 * abs(p.x) * sin((uTime)*100.*(1.0 + 0.5*rand(vec2(d,0.))) - displacement);\n    \n     vec4 modelPosition = modelMatrix * vec4(p, 1.0);\n    \n    vec4 viewPosition = viewMatrix * modelPosition;\n    vec4 projectedPosition = projectionMatrix * viewPosition;\n    vP = position;\n    gl_Position = projectedPosition;\n}";
@@ -28078,36 +28087,35 @@ class Controllers {
     this.experience = new Experience();
     this.canvas = this.experience.canvas;
     this.sizes = this.experience.sizes;
-    this.scene = this.experience.scene;
+    this.cameraGroup = this.experience.cameraGroup;
     this.renderer = this.experience.renderer;
     this.controller1 = this.renderer.instance.xr.getController(0);
-    this.scene.add(this.controller1);
+    this.cameraGroup.add(this.controller1);
     this.controller2 = this.renderer.instance.xr.getController(1);
-    this.scene.add(this.controller2);
+    this.cameraGroup.add(this.controller2);
     this.controllerModelFactory = new XRControllerModelFactory();
     this.handModelFactory = new XRHandModelFactory();
     this.controllerGrip1 = this.renderer.instance.xr.getControllerGrip(0);
     this.controllerGrip1.add(
       this.controllerModelFactory.createControllerModel(this.controllerGrip1)
     );
-    this.scene.add(this.controllerGrip1);
+    this.cameraGroup.add(this.controllerGrip1);
     this.hand1 = this.renderer.instance.xr.getHand(0);
     this.hand1.add(this.handModelFactory.createHandModel(this.hand1, "mesh"));
-    this.scene.add(this.hand1);
+    this.cameraGroup.add(this.hand1);
     this.controllerGrip2 = this.renderer.instance.xr.getControllerGrip(1);
     this.controllerGrip2.add(
       this.controllerModelFactory.createControllerModel(this.controllerGrip2)
     );
-    this.scene.add(this.controllerGrip2);
+    this.cameraGroup.add(this.controllerGrip2);
     this.hand2 = this.renderer.instance.xr.getHand(1);
     this.hand2.add(this.handModelFactory.createHandModel(this.hand2, "mesh"));
-    this.scene.add(this.hand2);
+    this.cameraGroup.add(this.hand2);
     this.debugBoxR = new Mesh(
       new BoxGeometry(1, 1, 1),
       new MeshBasicMaterial({ color: 16711680 })
     );
     this.debugBoxR.visible = false;
-    this.scene.add(this.debugBoxR);
     this.still = false;
     this.emitter = this.experience.emitter;
     this.stillStartTime = 0;
@@ -28158,12 +28166,12 @@ class Experience {
     window.experience = this;
     this.canvas = canvas;
     this.emitter = new EventEmitter();
-    this.sampleBoolean = true;
-    this.sampleNumber = 5;
     this.sizes = new Sizes();
     this.scene = new Scene();
     this.resources = new Resources(sources);
     this.world = new World();
+    this.cameraGroup = new Group();
+    this.scene.add(this.cameraGroup);
     this.camera = new Camera2();
     this.renderer = new Renderer();
     this.mouse = new Mouse();
@@ -28171,7 +28179,7 @@ class Experience {
     this.clock.start();
     this.renderer.instance.xr.enabled = true;
     const sessionInit = {
-      requiredFeatures: ["hand-tracking"]
+      optionalFeatures: ["hand-tracking"]
       //necessary to get the hands going
     };
     document.body.appendChild(
@@ -28223,4 +28231,4 @@ class Experience {
   }
 }
 new Experience(document.querySelector("canvas.webgl"));
-//# sourceMappingURL=index-CtbQfnrs.js.map
+//# sourceMappingURL=index-BlZH73pZ.js.map

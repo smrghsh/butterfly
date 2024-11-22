@@ -7,14 +7,15 @@ export default class Controllers {
     this.experience = new Experience();
     this.canvas = this.experience.canvas;
     this.sizes = this.experience.sizes;
-    this.scene = this.experience.scene;
+    // this.scene = this.experience.scene;
+    this.cameraGroup = this.experience.cameraGroup;
     this.renderer = this.experience.renderer;
 
     this.controller1 = this.renderer.instance.xr.getController(0);
-    this.scene.add(this.controller1);
+    this.cameraGroup.add(this.controller1);
 
     this.controller2 = this.renderer.instance.xr.getController(1);
-    this.scene.add(this.controller2);
+    this.cameraGroup.add(this.controller2);
 
     this.controllerModelFactory = new XRControllerModelFactory();
     this.handModelFactory = new XRHandModelFactory();
@@ -23,19 +24,19 @@ export default class Controllers {
     this.controllerGrip1.add(
       this.controllerModelFactory.createControllerModel(this.controllerGrip1)
     );
-    this.scene.add(this.controllerGrip1);
+    this.cameraGroup.add(this.controllerGrip1);
     this.hand1 = this.renderer.instance.xr.getHand(0);
     this.hand1.add(this.handModelFactory.createHandModel(this.hand1, "mesh"));
-    this.scene.add(this.hand1);
+    this.cameraGroup.add(this.hand1);
 
     this.controllerGrip2 = this.renderer.instance.xr.getControllerGrip(1);
     this.controllerGrip2.add(
       this.controllerModelFactory.createControllerModel(this.controllerGrip2)
     );
-    this.scene.add(this.controllerGrip2);
+    this.cameraGroup.add(this.controllerGrip2);
     this.hand2 = this.renderer.instance.xr.getHand(1);
     this.hand2.add(this.handModelFactory.createHandModel(this.hand2, "mesh"));
-    this.scene.add(this.hand2);
+    this.cameraGroup.add(this.hand2);
 
     this.debugBoxR = new THREE.Mesh(
       new THREE.BoxGeometry(1, 1, 1),

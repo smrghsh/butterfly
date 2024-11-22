@@ -6,7 +6,7 @@ export default class Camera {
   constructor() {
     this.experience = new Experience();
     this.sizes = this.experience.sizes;
-    this.scene = this.experience.scene;
+    this.cameraGroup = this.experience.cameraGroup;
     this.canvas = this.experience.canvas;
     this.setInstance();
     this.setOrbitControls();
@@ -19,7 +19,7 @@ export default class Camera {
       100
     );
     this.lookAt = new THREE.Vector3(0, 1, 0);
-    this.scene.add(this.instance);
+    this.cameraGroup.add(this.instance);
   }
   setOrbitControls() {
     this.controls = new OrbitControls(this.instance, this.canvas);
