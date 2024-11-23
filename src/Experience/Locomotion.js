@@ -3,7 +3,7 @@ import Experience from "./Experience";
 import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 import { XRHandModelFactory } from "three/examples/jsm/webxr/XRHandModelFactory.js";
 export default class Locomotion {
-  constructor(controller, speedScalar = 4) {
+  constructor(controller, speedScalar = 10) {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.anchorPoint = null;
