@@ -27,7 +27,10 @@ export default class Locomotion {
   }
 
   update() {
-    if(!this.controllers?.hand2 || !this.experience.renderer.instance.xr.isPresenting) {
+    if (
+      !this.controllers?.hand2 ||
+      !this.experience.renderer.instance.xr.isPresenting
+    ) {
       console.log("Not XR");
       return;
     }
@@ -35,61 +38,75 @@ export default class Locomotion {
     var ringtipPosition;
     // TODO: remove
     const thumbtip = this.controllers?.hand2?.joints["thumb-tip"];
-    if(thumbtip) {
+    if (thumbtip) {
       thumbtipPosition = thumbtip.position.clone();
     }
     const ringtip = this.controllers?.hand2?.joints["ring-finger-tip"];
-    if(ringtip) {
+    if (ringtip) {
       ringtipPosition = ringtip.position.clone();
     }
-    if(!this.controllers) {
+    if (!this.controllers) {
       this.debugMesh1.material.color.setHex(0x000000);
       this.debugMesh2.material.color.setHex(0x000000);
     }
-    if(thumbtipPosition && ringtipPosition) {
-      this.debugMesh1.position.set(thumbtipPosition.x, thumbtipPosition.y, thumbtipPosition.z);
-      this.debugMesh2.position.set(ringtipPosition.x, ringtipPosition.y, ringtipPosition.z);
-    
+    if (thumbtipPosition && ringtipPosition) {
+      this.debugMesh1.position.set(
+        thumbtipPosition.x,
+        thumbtipPosition.y,
+        thumbtipPosition.z
+      );
+      this.debugMesh2.position.set(
+        ringtipPosition.x,
+        ringtipPosition.y,
+        ringtipPosition.z
+      );
+    }
 
     // TODO: this needs to be updated to use the hand
     // UNDER THIS IS CHARLES -----------------------------
-    if (ringtipPosition.distanceTo(thumbtipPosition) < 0.02) {
+    if (
+      ringtipPosition.distanceTo(thumbtipPosition) < 0.02 &&
+      !this.isSqueezing
+    ) {
       // Start locomotion by setting the anchor point
-      this.anchorPoint = this.controllers.hand2.joints["thumb-tip"].position.clone();
-      this.debugMesh1.material.color.setHex(0xffffff);
-      this.debugMesh2.material.color.setHex(0xffffff);
+      this.anchorPoint = thumbtipPosition.clone();
+
       this.isSqueezing = true;
     }
     // BEFORE THIS IS CHARLES -----------------------------
 
     if (this.isSqueezing) {
+      this.debugMesh1.material.color.setHex(0xffffff);
+      this.debugMesh2.material.color.setHex(0xffffff);
       // Calculate the movement vector
 
       // TODO: this needs to be updated to use the hand
-      const currentPosition = this.controllers.hand2.joints["thumb-tip"].position.clone();
-      console.log("Current Position: ", currentPosition);
-      console.log("Anchor Point: ", this.anchorPoint);
+      const currentPosition = thumbtipPosition.clone();
+      // console.log("Current Position: ", currentPosition);
+      // console.log("Anchor Point: ", this.anchorPoint);
       const movementVector = currentPosition.sub(this.anchorPoint);
       // multiply movement vector by speed scalar
       movementVector.multiplyScalar(this.speedScalar);
       // Apply movement to the user's group in the experience scene
-      console.log("Moving this fast: ", movementVector);
+      // console.log("Moving this fast: ", movementVector);
       this.experience.cameraGroup.position.sub(movementVector);
 
       // TODO: update to use hand
       // Update the anchor point to the new controller position
-      this.anchorPoint = this.controllers.hand2.joints["thumb-tip"].position.clone();
+      this.anchorPoint = thumbtipPosition.clone();
     }
 
     // TODO: update to use the hand
-    if (ringtipPosition.distanceTo(thumbtipPosition) >= 0.02 && this.isSqueezing) {
-      console.log("YES! YES!")
-      this.debugMesh1.material.color.setHex(0xfff000);
-      this.debugMesh2.material.color.setHex(0x000fff);
+    if (
+      ringtipPosition.distanceTo(thumbtipPosition) >= 0.02 &&
+      this.isSqueezing
+    ) {
+      console.log("ending locomotion");
+      this.debugMesh1.material.color.setHex(0xff0000);
+      this.debugMesh2.material.color.setHex(0x0000ff);
       // End locomotion
       this.isSqueezing = false;
       this.anchorPoint = null;
     }
-  }
   }
 }
