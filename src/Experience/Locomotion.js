@@ -31,7 +31,7 @@ export default class Locomotion {
       !this.controllers?.hand2 ||
       !this.experience.renderer.instance.xr.isPresenting
     ) {
-      console.log("Not XR");
+      // console.log("Not XR");
       return;
     }
     var thumbtipPosition;
@@ -65,7 +65,7 @@ export default class Locomotion {
     // TODO: this needs to be updated to use the hand
     // UNDER THIS IS CHARLES -----------------------------
     if (
-      ringtipPosition.distanceTo(thumbtipPosition) < 0.02 &&
+      ringtipPosition?.distanceTo(thumbtipPosition) < 0.02 &&
       !this.isSqueezing
     ) {
       // Start locomotion by setting the anchor point
@@ -98,7 +98,7 @@ export default class Locomotion {
 
     // TODO: update to use the hand
     if (
-      ringtipPosition.distanceTo(thumbtipPosition) >= 0.02 &&
+      ringtipPosition?.distanceTo(thumbtipPosition) >= 0.02 &&
       this.isSqueezing
     ) {
       console.log("ending locomotion");
