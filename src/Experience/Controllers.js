@@ -2,6 +2,7 @@ import * as THREE from "three";
 import Experience from "./Experience.js";
 import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 import { XRHandModelFactory } from "three/examples/jsm/webxr/XRHandModelFactory.js";
+import Locomotion from "./Locomotion.js";
 export default class Controllers {
   constructor() {
     this.experience = new Experience();

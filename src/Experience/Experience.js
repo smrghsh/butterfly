@@ -6,6 +6,7 @@ import Mouse from "./Utils/Mouse.js";
 import Camera from "./Camera.js";
 import Renderer from "./Renderer.js";
 import World from "./World/World.js";
+import Locomotion from "./Locomotion.js";
 import sources from "./sources.js";
 import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
 import Controllers from "./Controllers.js";
@@ -40,7 +41,7 @@ export default class Experience {
 
     this.renderer.instance.xr.enabled = true;
     const sessionInit = {
-      optionalFeatures: ["hand-tracking"], //necessary to get the hands going
+      requiredFeatures: ["hand-tracking"], //necessary to get the hands going
     };
     document.body.appendChild(
       VRButton.createButton(this.renderer.instance, sessionInit)
@@ -49,10 +50,13 @@ export default class Experience {
       // tick();
       this.world.update();
       this.controllers?.update();
+      this.locomotion?.update();
       this.renderer.instance.render(this.scene, this.camera.instance);
     });
 
     this.controllers = new Controllers();
+    this.locomotion = new Locomotion(this.controllers);
+
 
     this.raycaster = new THREE.Raycaster();
     this.INTERSECTED = null;
@@ -71,6 +75,8 @@ export default class Experience {
   update() {
     this.camera.update();
     this.world.update();
+    this.controllers?.update();
+    this.locomotion?.update();
 
     //change this to be controller if controller is active
     this.raycaster.setFromCamera(this.mouse, this.camera.instance);
