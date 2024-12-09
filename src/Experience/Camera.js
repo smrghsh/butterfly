@@ -33,5 +33,6 @@ export default class Camera {
   }
   update() {
     this.controls.update();
+    
   }
 }
