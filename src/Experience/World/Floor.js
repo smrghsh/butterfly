@@ -8,6 +8,7 @@ export default class Floor {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
+    this.debug = this.experience.debug;
 
     this.debug = this.experience.debug;
 
@@ -31,5 +32,7 @@ export default class Floor {
     this.forestFloor.scale.set(0.8, 0.8, 0.8);
     this.forestFloor.rotation.y = Math.PI;
     this.scene.add(this.forestFloor);
+
+    this.debug.ui.add(this.forestFloor, "visible").name("Floor Visibility");
   }
 }

@@ -18,11 +18,14 @@ export default class Butterflies {
   constructor() {
     this.experience = new Experience();
     this.scene = this.experience.scene;
-    //resources
     this.resources = this.experience.resources;
+    this.debug = this.experience.debug;
 
-    // butterfly boundaries
-    this.boundary = 3;
+    this.parameters = {
+      quantity: 100,
+      boundary: 3,
+    };
+
     //get butterfly texture
     this.butterflyTexture = this.resources.items.butterflyTexture;
 
@@ -45,7 +48,23 @@ export default class Butterflies {
     this.mesh.scale.set(0.1, 0.1, 0.1);
 
     this.butterflies = new THREE.Group();
-    for (let i = 0; i < 100; i++) {
+    this.populate();
+
+    this.debug.ui
+      .add(this.parameters, "quantity")
+      .min(0)
+      .max(1000)
+      .step(1)
+      .onChange(() => {
+        this.depopulate();
+        this.populate();
+      })
+      .name("Quantity Butterflies");
+
+    this.scene.add(this.butterflies);
+  }
+  populate() {
+    for (let i = 0; i < this.parameters.quantity; i++) {
       let butterflyGeometry = this.geometry.clone(); // Clone geometry
       let displacement = new Float32Array(
         butterflyGeometry.attributes.position.count
@@ -72,7 +91,36 @@ export default class Butterflies {
       butterfly.position.z = (Math.random() - 0.5) * 5;
       this.butterflies.add(butterfly);
     }
-    this.scene.add(this.butterflies);
+  }
+  depopulate() {
+    const group = this.butterflies;
+    if (!(group instanceof THREE.Group)) {
+      console.error("Provided object is not a THREE.Group");
+      return;
+    }
+
+    group.children.forEach((child) => {
+      if (child instanceof THREE.Mesh) {
+        // Dispose geometry
+        if (child.geometry) {
+          child.geometry.dispose();
+        }
+
+        // Dispose materials
+        if (Array.isArray(child.material)) {
+          child.material.forEach((material) => {
+            if (material.dispose) {
+              material.dispose();
+            }
+          });
+        } else if (child.material && child.material.dispose) {
+          child.material.dispose();
+        }
+
+        // Remove child from the group
+        group.remove(child);
+      }
+    });
   }
   update() {
     this.material.uniforms.uTime.value =
@@ -97,23 +145,23 @@ export default class Butterflies {
         )
       );
       // reset the position if the butterfly is too far away
-      if (butterfly.position.x > this.boundary) {
-        butterfly.position.x = -1 * this.boundary;
+      if (butterfly.position.x > this.parameters.boundary) {
+        butterfly.position.x = -1 * this.parameters.boundary;
       }
-      if (butterfly.position.x < -1 * this.boundary) {
-        butterfly.position.x = this.boundary;
+      if (butterfly.position.x < -1 * this.parameters.boundary) {
+        butterfly.position.x = this.parameters.boundary;
       }
-      if (butterfly.position.y > this.boundary) {
-        butterfly.position.y = -1 * this.boundary;
+      if (butterfly.position.y > this.parameters.boundary) {
+        butterfly.position.y = -1 * this.parameters.boundary;
       }
-      if (butterfly.position.y < -1 * this.boundary) {
-        butterfly.position.y = this.boundary;
+      if (butterfly.position.y < -1 * this.parameters.boundary) {
+        butterfly.position.y = this.parameters.boundary;
       }
-      if (butterfly.position.z > this.boundary) {
-        butterfly.position.z = -1 * this.boundary;
+      if (butterfly.position.z > this.parameters.boundary) {
+        butterfly.position.z = -1 * this.parameters.boundary;
       }
-      if (butterfly.position.z < -1 * this.boundary) {
-        butterfly.position.z = this.boundary;
+      if (butterfly.position.z < -1 * this.parameters.boundary) {
+        butterfly.position.z = this.parameters.boundary;
       }
     });
   }
