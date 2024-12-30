@@ -36,7 +36,6 @@ export default class Butterfly {
     this.mesh.scale.set(0.085, 0.085, 0.085);
 
     this.scene.add(this.mesh);
-    console.log(this.mouse);
     this.mouse.emitter.on("still", () => {
       this.mesh.visible = true;
       this.skittish = false;

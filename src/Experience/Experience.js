@@ -10,9 +10,12 @@ import sources from "./sources.js";
 import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
 import Controllers from "./Controllers.js";
 import EventEmitter from "./Utils/EventEmitter.js";
+import StatsPanels from "./Utils/StatsPanels.js";
+
 let instance = null;
 
 export default class Experience {
+  //if you are new to javascript, I understand how the following lines look like witchcraft
   constructor(canvas) {
     if (instance) {
       return instance;
@@ -31,6 +34,8 @@ export default class Experience {
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.mouse = new Mouse();
+    this.debug = new Debug();
+    this.statsPanels = new StatsPanels();
 
     /**
      * Clock
@@ -39,17 +44,21 @@ export default class Experience {
     this.clock.start();
 
     this.renderer.instance.xr.enabled = true;
+
     const sessionInit = {
       optionalFeatures: ["hand-tracking"], //necessary to get the hands going
     };
+
     document.body.appendChild(
       VRButton.createButton(this.renderer.instance, sessionInit)
     );
+
     this.renderer.instance.setAnimationLoop(() => {
-      // tick();
+      this.statsPanels.begin();
       this.world.update();
       this.controllers?.update();
       this.renderer.instance.render(this.scene, this.camera.instance);
+      this.statsPanels.end();
     });
 
     this.controllers = new Controllers();
@@ -68,13 +77,7 @@ export default class Experience {
     console.log("resized occured");
     this.camera.resize();
   }
-  update() {
-    this.camera.update();
-    this.world.update();
-
-    //change this to be controller if controller is active
-    this.raycaster.setFromCamera(this.mouse, this.camera.instance);
-  }
+  update() {}
   destroy() {
     // TBH I've never used this
     this.sizes.off("resize");

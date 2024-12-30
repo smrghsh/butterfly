@@ -60,6 +60,16 @@ main {
   background-color: rgba(0, 0, 0, 0.5);
   max-width: 400px;
 }
+
+/* this is so the main panel doesn't collide with stats.js panels */
+@media (min-width: 600px) {
+  main {
+    margin-left: 90px;
+    margin-top: 90px;
+    padding: 2em;
+    max-width: 450px;
+  }
+}
 main > p {
   margin-top: 0.5em;
 }
