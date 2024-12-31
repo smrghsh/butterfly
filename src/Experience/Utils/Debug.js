@@ -16,7 +16,8 @@ export default class Debug {
         .name("Show Text")
         .onChange((value) => {
           this.toggleVisibility(value);
-        });
+        })
+        .listen();
     }
   }
   toggleVisibility(visible) {

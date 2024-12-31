@@ -34,4 +34,17 @@ export default class Camera {
   update() {
     this.controls.update();
   }
+  defaultPosition() {
+    this.instance.position.set(0, 0.9, 5);
+    this.lookAt = new THREE.Vector3(0, 1, 0);
+
+    this.controls.target = new THREE.Vector3(0, 0.9, 0);
+  }
+  examplePosition() {
+    //    this.instance.position.set(0, 0.9, 5);
+    this.instance.position.set(-1, 2, 1);
+    this.lookAt = new THREE.Vector3(0, 0, 0);
+
+    this.controls.target = new THREE.Vector3(0, 0.0, 0);
+  }
 }

@@ -8,6 +8,7 @@ export default class Butterfly {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.mouse = this.experience.mouse;
+    this.debug = this.experience.debug;
     //resources
     this.resources = this.experience.resources;
     this.mouse = this.experience.mouse;
@@ -34,6 +35,11 @@ export default class Butterfly {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.position.y += 0.001;
     this.mesh.scale.set(0.085, 0.085, 0.085);
+
+    this.debug.ui
+      .add(this.mesh, "visible")
+      .name("Following Butterfly Visibility")
+      .listen();
 
     this.scene.add(this.mesh);
     this.mouse.emitter.on("still", () => {

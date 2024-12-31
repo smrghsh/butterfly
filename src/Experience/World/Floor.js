@@ -33,6 +33,9 @@ export default class Floor {
     this.forestFloor.rotation.y = Math.PI;
     this.scene.add(this.forestFloor);
 
-    this.debug.ui.add(this.forestFloor, "visible").name("Floor Visibility");
+    this.debug.ui
+      .add(this.forestFloor, "visible")
+      .name("Floor Visibility")
+      .listen();
   }
 }

@@ -53,13 +53,18 @@ export default class Butterflies {
     this.debug.ui
       .add(this.parameters, "quantity")
       .min(0)
-      .max(1000)
+      .max(10000)
       .step(1)
       .onChange(() => {
         this.depopulate();
         this.populate();
       })
       .name("Quantity Butterflies");
+    // this.butterflies visibility
+    this.debug.ui
+      .add(this.butterflies, "visible")
+      .name("Butterflies Visibility")
+      .listen();
 
     this.scene.add(this.butterflies);
   }

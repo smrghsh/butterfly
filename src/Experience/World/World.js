@@ -4,7 +4,7 @@ import Environment from "./Environment.js";
 import Floor from "./Floor.js";
 import Butterfly from "./Butterfly.js";
 import Butterflies from "./Butterflies.js";
-
+import ExampleButterfly from "./ExampleButterfly.js";
 export default class World {
   constructor() {
     this.experience = new Experience();
@@ -21,6 +21,7 @@ export default class World {
 
       this.butterflies = new Butterflies();
       this.butterfly = new Butterfly();
+      this.example = new ExampleButterfly();
 
       this.environment = new Environment();
       this.ready = true;
@@ -30,6 +31,7 @@ export default class World {
     if (this.ready) {
       this.butterflies.update();
       this.butterfly.update();
+      this.example.update();
     }
   }
 }

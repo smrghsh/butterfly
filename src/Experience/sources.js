@@ -5,9 +5,19 @@ export default [
     path: "textures/butterfly.png",
   },
   {
-    name: "star",
+    name: "butterflyTexture2",
     type: "texture",
-    path: "textures/5.png",
+    path: "textures/butterfly2.png",
+  },
+  {
+    name: "butterflyTexture3",
+    type: "texture",
+    path: "textures/butterfly3.png",
+  },
+  {
+    name: "planeTexture",
+    type: "texture",
+    path: "textures/grey.png",
   },
   {
     name: "forestFloor",
