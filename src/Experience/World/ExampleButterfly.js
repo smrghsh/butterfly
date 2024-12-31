@@ -23,9 +23,7 @@ export default class ExampleButterfly {
       vertexShader: ButterflyVertexShader,
       fragmentShader: ButterflyFragmentShader,
       transparent: true,
-      // opacity: 0.5,
       side: THREE.DoubleSide,
-      //   wireframe: true,
       color: 0xffffff,
       uniforms: {
         uTime: { value: 0.0 },
@@ -50,6 +48,12 @@ export default class ExampleButterfly {
     this.exampleFolder
       .add(this.material.uniforms.texture1, "value", this.butterflyTextures)
       .name("Butterfly Texture");
+    this.exampleFolder
+      .add(this, "speed")
+      .min(0)
+      .max(1)
+      .step(0.01)
+      .name("Speed");
     this.exampleFolder.close();
   }
   update() {
@@ -61,7 +65,6 @@ export default class ExampleButterfly {
       this.mesh.visible = true;
       this.world.floor.forestFloor.visible = false;
       this.world.butterflies.butterflies.visible = false;
-      //   this.world.butterflies.depopulate();
       this.world.butterfly.mesh.visible = false;
       this.experience.camera.examplePosition();
       this.exampleFolder.open();
