@@ -46,7 +46,6 @@ export default class ExampleButterfly {
         this.exampleMode(boolean);
       })
       .listen();
-    this.scene.add(new THREE.AxesHelper(5));
     this.exampleFolder = this.debug.ui.addFolder("Example Parameters");
     this.exampleFolder
       .add(this.material.uniforms.texture1, "value", this.butterflyTextures)
